@@ -14,26 +14,7 @@
       </div>
 
       <div class="column">
-        <ChronometerComp />
-        <!-- <div
-          class="is-flex is-align-items-center is-justify-content-space-between"
-        >
-          <section>
-            <strong> {{ elapsedTime }} </strong>
-          </section>
-          <button class="button" @click="start">
-            <span class="icon">
-              <i class="fas fa-play"></i>
-            </span>
-            <span>play</span>
-          </button>
-          <button class="button" @click="stop">
-            <span class="icon">
-              <i class="fas fa-stop"></i>
-            </span>
-            <span>stop</span>
-          </button>
-        </div> -->
+        <TimerComp />
       </div>
     </div>
   </div>
@@ -42,34 +23,12 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 
-import ChronometerComp from "./ChronometerComp.vue";
+import TimerComp from "./TimerComp.vue";
 
 export default defineComponent({
   name: "FormComp",
   components: {
-    ChronometerComp,
+    TimerComp,
   },
-  // data: () => {
-  //   return {
-  //     timeInSeconds: 0,
-  //     stopwatch: 0,
-  //   };
-  // },
-  // computed: {
-  //   elapsedTime(): string {
-  //     return new Date(this.timeInSeconds * 1000).toISOString().slice(11, 19);
-  //   },
-  // },
-  // methods: {
-  //   start() {
-  //     this.stopwatch = setInterval(() => {
-  //       this.timeInSeconds++;
-  //     }, 1000);
-  //   },
-  //   stop() {
-  //     clearInterval(this.stopwatch);
-  //     this.timeInSeconds = 0;
-  //   },
-  // },
 });
 </script>
