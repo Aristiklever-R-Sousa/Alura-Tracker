@@ -7,7 +7,7 @@
       </span>
       <span>play</span>
     </button>
-    <button class="button" @click="stop" :disabled="!chronIsRunnning">
+    <button class="button" @click="finish" :disabled="!chronIsRunnning">
       <span class="icon">
         <i class="fas fa-stop"></i>
       </span>
@@ -22,6 +22,7 @@ import ChronometerComp from "./ChronometerComp.vue";
 
 export default defineComponent({
   name: "TimerComp",
+  emits: ["onTimerIsFinish"],
   data() {
     return {
       timeInSeconds: 0,
@@ -36,7 +37,8 @@ export default defineComponent({
       }, 1000);
       this.chronIsRunnning = true;
     },
-    stop() {
+    finish() {
+      this.$emit("onTimerIsFinish", this.timeInSeconds);
       clearInterval(this.chron);
       this.timeInSeconds = 0;
       this.chronIsRunnning = false;
