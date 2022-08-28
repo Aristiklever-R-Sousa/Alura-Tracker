@@ -14,7 +14,8 @@
       </div>
 
       <div class="column">
-        <div
+        <ChronometerComp />
+        <!-- <div
           class="is-flex is-align-items-center is-justify-content-space-between"
         >
           <section>
@@ -32,7 +33,7 @@
             </span>
             <span>stop</span>
           </button>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -41,29 +42,34 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 
+import ChronometerComp from "./ChronometerComp.vue";
+
 export default defineComponent({
   name: "FormComp",
-  data: () => {
-    return {
-      timeInSeconds: 0,
-      stopwatch: 0,
-    };
+  components: {
+    ChronometerComp,
   },
-  computed: {
-    elapsedTime(): string {
-      return new Date(this.timeInSeconds * 1000).toISOString().slice(11, 19);
-    },
-  },
-  methods: {
-    start() {
-      this.stopwatch = setInterval(() => {
-        this.timeInSeconds++;
-      }, 1000);
-    },
-    stop() {
-      clearInterval(this.stopwatch);
-      this.timeInSeconds = 0;
-    },
-  },
+  // data: () => {
+  //   return {
+  //     timeInSeconds: 0,
+  //     stopwatch: 0,
+  //   };
+  // },
+  // computed: {
+  //   elapsedTime(): string {
+  //     return new Date(this.timeInSeconds * 1000).toISOString().slice(11, 19);
+  //   },
+  // },
+  // methods: {
+  //   start() {
+  //     this.stopwatch = setInterval(() => {
+  //       this.timeInSeconds++;
+  //     }, 1000);
+  //   },
+  //   stop() {
+  //     clearInterval(this.stopwatch);
+  //     this.timeInSeconds = 0;
+  //   },
+  // },
 });
 </script>
