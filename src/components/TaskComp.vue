@@ -1,18 +1,22 @@
 <template>
-  <div class="box has-text-weight-bold">
+  <Box>
     <div class="columns">
-      <div class="column is-7">{{ task.description }}</div>
+      <div class="column is-7">
+        {{
+          task.description ? task.description : "Nenhuma descrição informada."
+        }}
+      </div>
       <div class="column">
         <Chronometer :time-in-seconds="task.timeInSeconds" />
-        {{ typeof task.timeInSeconds }}
       </div>
     </div>
-  </div>
+  </Box>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 
+import Box from "./BoxComp.vue";
 import Chronometer from "./ChronometerComp.vue";
 
 import ITask from "@/interfaces/ITask";
@@ -27,12 +31,7 @@ export default defineComponent({
   },
   components: {
     Chronometer,
+    Box,
   },
 });
 </script>
-
-<style scoped>
-.box {
-  background: #faf0ca;
-}
-</style>
