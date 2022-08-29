@@ -1,24 +1,26 @@
 <template>
   <div class="is-flex is-align-items-center is-justify-content-space-between">
     <ChronometerComp :time-in-seconds="timeInSeconds" />
-    <button class="button" @click="start" :disabled="chronIsRunnning">
-      <span class="icon">
-        <i class="fas fa-play"></i>
-      </span>
-      <span>play</span>
-    </button>
-    <button class="button" @click="finish" :disabled="!chronIsRunnning">
-      <span class="icon">
-        <i class="fas fa-stop"></i>
-      </span>
-      <span>stop</span>
-    </button>
+    <Button
+      name="play"
+      icon="fas fa-play"
+      @click="start"
+      :is-disabled="chronIsRunnning"
+    />
+    <Button
+      name="stop"
+      icon="fas fa-stop"
+      @click="finish"
+      :is-disabled="!chronIsRunnning"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+
 import ChronometerComp from "./ChronometerComp.vue";
+import Button from "./ButtonComp.vue";
 
 export default defineComponent({
   name: "TimerComp",
@@ -44,6 +46,6 @@ export default defineComponent({
       this.chronIsRunnning = false;
     },
   },
-  components: { ChronometerComp },
+  components: { ChronometerComp, Button },
 });
 </script>
