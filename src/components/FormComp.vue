@@ -25,6 +25,7 @@
 import { defineComponent } from "vue";
 
 import TimerComp from "./TimerComp.vue";
+import ITask from "@/interfaces/ITask";
 
 export default defineComponent({
   name: "FormComp",
@@ -33,9 +34,14 @@ export default defineComponent({
       description: "",
     };
   },
+  emits: ["onSaveTask"],
   methods: {
-    taskFinish(timeElapsed: number) {
-      console.log(this.description, ` feita em ${timeElapsed}s`);
+    taskFinish(timeInSeconds: number) {
+      const payload: ITask = {
+        description: this.description,
+        timeInSeconds,
+      };
+      this.$emit("onSaveTask", payload);
       this.description = "";
     },
   },
