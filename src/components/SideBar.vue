@@ -4,6 +4,22 @@
       <img src="../assets/alura-tracker-logo.png" alt="Alura Tracker" />
     </h1>
     <button class="button" @click="changeTheme">{{ buttonText }}</button>
+    <nav class="painel mt-5">
+      <ul>
+        <li>
+          <RouterLink to="/" class="link">
+            <i class="fas fa-tasks"></i>
+            Tasks
+          </RouterLink>
+        </li>
+        <li>
+          <RouterLink to="/projects" class="link">
+            <i class="fas fa-project-diagram"></i>
+            Projects
+          </RouterLink>
+        </li>
+      </ul>
+    </nav>
   </header>
 </template>
 
@@ -54,5 +70,19 @@ img {
     padding: 2.5rem;
     height: auto;
   }
+}
+
+.painel li {
+  margin: 8px 0;
+  text-align: left !important;
+}
+.link {
+  color: rgb(233, 229, 229);
+}
+.link:hover {
+  color: #faf0ca;
+}
+.link.router-link-active {
+  color: #faf0ca;
 }
 </style>
