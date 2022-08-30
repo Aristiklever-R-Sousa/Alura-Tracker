@@ -1,9 +1,9 @@
 <template>
   <button :name="name" class="button" @click="callFunc" :disabled="isDisabled">
-    <span class="icon">
+    <span v-if="icon" class="icon">
       <i :class="icon"></i>
     </span>
-    <span>{{ name }}</span>
+    <span v-if="name">{{ name }}</span>
   </button>
 </template>
 
@@ -15,11 +15,9 @@ export default defineComponent({
   props: {
     name: {
       type: String,
-      required: true,
     },
     icon: {
       type: String,
-      required: true,
     },
     isDisabled: {
       type: Boolean,

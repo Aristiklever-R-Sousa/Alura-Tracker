@@ -35,26 +35,27 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 
-import IProject from "@/interfaces/IProject";
+import { useStore } from "@/store";
 
 export default defineComponent({
   name: "ProjectsComp",
   data() {
     return {
       projectName: "",
-      projects: [] as IProject[],
     };
   },
   methods: {
     salve() {
-      const project: IProject = {
-        name: this.projectName,
-        id: new Date().toISOString(),
-      };
-
-      this.projects.push(project);
+      this.store.commit("setProjects", this.projectName);
       this.projectName = "";
     },
+  },
+  setup() {
+    const store = useStore();
+    return {
+      store,
+      projects: store.state.projects,
+    };
   },
 });
 </script>

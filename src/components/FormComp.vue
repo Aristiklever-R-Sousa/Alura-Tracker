@@ -2,7 +2,7 @@
   <div class="box form">
     <div class="columns">
       <div
-        class="column is-8"
+        class="column is-5"
         role="form"
         aria-label="Formulário para criação de uma nova tarefa"
       >
@@ -13,6 +13,20 @@
           v-model="description"
         />
       </div>
+      <div class="column is-3">
+        <div class="select">
+          <select name="" id="" v-model="projectId">
+            <option value="">Selecione o projeto</option>
+            <option
+              v-for="project in projects"
+              :key="project.id"
+              :value="project.id"
+            >
+              {{ project.name }}
+            </option>
+          </select>
+        </div>
+      </div>
 
       <div class="column">
         <TimerComp @on-timer-is-finish="taskFinish" />
@@ -22,28 +36,45 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
 
 import TimerComp from "./TimerComp.vue";
 import ITask from "@/interfaces/ITask";
+import { useStore } from "@/store";
 
 export default defineComponent({
   name: "FormComp",
   data() {
     return {
       description: "",
+      projectId: "",
     };
   },
   emits: ["onSaveTask"],
   methods: {
     taskFinish(timeInSeconds: number) {
+      const project = this.projects.find(
+        (project) => project.id === this.projectId
+      );
+
+      // if (project === undefined)
+      //   this.$emit("onSaveTask", { error: "Projeto não encontrado" });
+
       const payload: ITask = {
         description: this.description,
         timeInSeconds,
+        project,
       };
+
       this.$emit("onSaveTask", payload);
       this.description = "";
     },
+  },
+  setup() {
+    const store = useStore();
+    return {
+      projects: computed(() => store.state.projects),
+    };
   },
   components: {
     TimerComp,
