@@ -15,7 +15,8 @@ import Task from "@/components/TaskComp.vue";
 import Box from "@/components/BoxComp.vue";
 
 import ITask from "@/interfaces/ITask";
-import { ADD_TASK } from "@/store/type-mutations";
+import { ADD_TASK, NOTIFY } from "@/store/type-mutations";
+import { NotificationType } from "@/interfaces/INotication";
 
 export default defineComponent({
   name: "TasksView",
@@ -31,6 +32,17 @@ export default defineComponent({
   },
   methods: {
     addTask(task: ITask) {
+      const project = this.store.state.projects.find(
+        (p) => p.id == task.project.id
+      );
+      if (!project) {
+        this.store.commit(NOTIFY, {
+          title: "Ops!",
+          text: "Selecione um projeto antes de finalizar a tarefa!",
+          type: NotificationType.FAIL,
+        });
+        return;
+      }
       this.store.commit(ADD_TASK, task);
     },
     toggleTheme(isDarkTheme: boolean) {

@@ -49,7 +49,14 @@ export const store = createStore<State>({
       state.tasks = state.tasks.filter((task) => task.id !== taskId);
     },
 
-    notify(state) {},
+    notify(state, newNotific: INotification) {
+      newNotific.id = new Date().getTime();
+      state.notifications.push(newNotific);
+
+      setTimeout(() => {
+        state.notifications.shift();
+      }, 3000);
+    },
   },
 });
 

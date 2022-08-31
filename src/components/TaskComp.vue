@@ -7,7 +7,7 @@
         }}
       </div>
       <div class="column">
-        {{ task.project ? task.project.name : "Nenhum projeto informado." }}
+        {{ task.project.name }}
       </div>
       <div class="column">
         <Chronometer :time-in-seconds="task.timeInSeconds" />

@@ -1,5 +1,5 @@
-export enum NoficationType {
-  SUCESS = "sucess",
+export enum NotificationType {
+  SUCESS = "success",
   FAIL = "danger",
   WARNING = "warning",
 }
@@ -7,6 +7,6 @@ export enum NoficationType {
 export interface INotification {
   title: string;
   text: string;
-  type: NoficationType;
+  type: NotificationType;
   id: number;
 }
