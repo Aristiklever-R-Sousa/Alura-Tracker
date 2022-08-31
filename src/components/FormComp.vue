@@ -58,6 +58,7 @@ export default defineComponent({
       ) || { id: "", name: "" };
 
       const payload: ITask = {
+        id: new Date().toISOString(),
         description: this.description,
         timeInSeconds,
         project,

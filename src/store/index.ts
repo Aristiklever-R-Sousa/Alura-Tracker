@@ -2,9 +2,11 @@ import { InjectionKey } from "vue";
 import { createStore, Store, useStore as vuexUseStore } from "vuex";
 
 import IProject from "@/interfaces/IProject";
+import ITask from "@/interfaces/ITask";
 
 interface State {
   projects: IProject[];
+  tasks: ITask[];
 }
 
 export const key: InjectionKey<Store<State>> = Symbol();
@@ -12,6 +14,7 @@ export const key: InjectionKey<Store<State>> = Symbol();
 export const store = createStore<State>({
   state: {
     projects: [],
+    tasks: [],
   },
   mutations: {
     addProject(state, projectName: string) {
@@ -28,6 +31,19 @@ export const store = createStore<State>({
     },
     deleteProject(state, projectId: string) {
       state.projects = state.projects.filter((proj) => proj.id !== projectId);
+    },
+
+    addTask(state, task: ITask) {
+      task.id = new Date().toISOString();
+
+      state.tasks.push(task);
+    },
+    editTask(state, taskP: ITask) {
+      const index = state.tasks.findIndex((task) => task.id === taskP.id);
+      state.tasks[index] = taskP;
+    },
+    deleteTask(state, taskId: string) {
+      state.tasks = state.tasks.filter((task) => task.id !== taskId);
     },
   },
 });

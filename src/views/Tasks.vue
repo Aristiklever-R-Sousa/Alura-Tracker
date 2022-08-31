@@ -7,19 +7,21 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, computed } from "vue";
 
+import { useStore } from "@/store";
 import Form from "@/components/FormComp.vue";
 import Task from "@/components/TaskComp.vue";
 import Box from "@/components/BoxComp.vue";
 
 import ITask from "@/interfaces/ITask";
+import { ADD_TASK } from "@/store/type-mutations";
 
 export default defineComponent({
   name: "TasksView",
   data() {
     return {
-      tasks: [] as ITask[],
+      // tasks: [] as ITask[],
       isDarkTheme: false,
     };
   },
@@ -30,11 +32,19 @@ export default defineComponent({
   },
   methods: {
     addTask(task: ITask) {
+      this.store.commit(ADD_TASK, task);
       this.tasks.push(task);
     },
     toggleTheme(isDarkTheme: boolean) {
       this.isDarkTheme = isDarkTheme;
     },
+  },
+  setup() {
+    const store = useStore();
+    return {
+      tasks: computed(() => store.state.tasks),
+      store,
+    };
   },
   components: {
     Form,

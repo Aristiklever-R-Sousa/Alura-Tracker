@@ -12,6 +12,14 @@
       <div class="column">
         <Chronometer :time-in-seconds="task.timeInSeconds" />
       </div>
+      <div class="column">
+        <Button
+          :name="'delete'"
+          :class="'ml-2 is-danger'"
+          :icon="{ name: 'fas fa-trash', class: 'is-small' }"
+          @click="removeTask(task.id)"
+        />
+      </div>
     </div>
   </Box>
 </template>
@@ -23,6 +31,8 @@ import Box from "./BoxComp.vue";
 import Chronometer from "./ChronometerComp.vue";
 
 import ITask from "@/interfaces/ITask";
+import { useStore } from "@/store";
+import { DELETE_TASK } from "@/store/type-mutations";
 
 export default defineComponent({
   name: "TaskComp",
@@ -31,6 +41,17 @@ export default defineComponent({
       type: Object as PropType<ITask>,
       required: true,
     },
+  },
+  methods: {
+    removeTask(taskId: string) {
+      this.store.commit(DELETE_TASK, taskId);
+    },
+  },
+  setup() {
+    const store = useStore();
+    return {
+      store,
+    };
   },
   components: {
     Chronometer,
