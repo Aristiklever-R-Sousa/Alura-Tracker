@@ -3,10 +3,12 @@ import { createStore, Store, useStore as vuexUseStore } from "vuex";
 
 import IProject from "@/interfaces/IProject";
 import ITask from "@/interfaces/ITask";
+import { INotification } from "@/interfaces/INotication";
 
 interface State {
   projects: IProject[];
   tasks: ITask[];
+  notifications: INotification[];
 }
 
 export const key: InjectionKey<Store<State>> = Symbol();
@@ -15,6 +17,7 @@ export const store = createStore<State>({
   state: {
     projects: [],
     tasks: [],
+    notifications: [],
   },
   mutations: {
     addProject(state, projectName: string) {
@@ -45,6 +48,8 @@ export const store = createStore<State>({
     deleteTask(state, taskId: string) {
       state.tasks = state.tasks.filter((task) => task.id !== taskId);
     },
+
+    notify(state) {},
   },
 });
 
