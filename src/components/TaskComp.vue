@@ -28,6 +28,7 @@
 import { defineComponent, PropType } from "vue";
 
 import Box from "./BoxComp.vue";
+import Button from "./ButtonComp.vue";
 import Chronometer from "./ChronometerComp.vue";
 
 import ITask from "@/interfaces/ITask";
@@ -56,6 +57,7 @@ export default defineComponent({
   components: {
     Chronometer,
     Box,
+    Button,
   },
 });
 </script>

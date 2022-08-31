@@ -21,7 +21,6 @@ export default defineComponent({
   name: "TasksView",
   data() {
     return {
-      // tasks: [] as ITask[],
       isDarkTheme: false,
     };
   },
@@ -33,7 +32,6 @@ export default defineComponent({
   methods: {
     addTask(task: ITask) {
       this.store.commit(ADD_TASK, task);
-      this.tasks.push(task);
     },
     toggleTheme(isDarkTheme: boolean) {
       this.isDarkTheme = isDarkTheme;
