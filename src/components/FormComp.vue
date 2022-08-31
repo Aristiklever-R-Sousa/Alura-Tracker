@@ -55,10 +55,7 @@ export default defineComponent({
     taskFinish(timeInSeconds: number) {
       const project = this.projects.find(
         (project) => project.id === this.projectId
-      );
-
-      // if (project === undefined)
-      //   this.$emit("onSaveTask", { error: "Projeto não encontrado" });
+      ) || { id: "", name: "" };
 
       const payload: ITask = {
         description: this.description,

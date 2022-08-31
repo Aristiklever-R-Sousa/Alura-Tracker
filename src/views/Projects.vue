@@ -1,70 +1,20 @@
 <template>
-  <section class="projects">
+  <div class="projects">
     <h1 class="title">Projetos</h1>
-    <form @submit.prevent="salve">
-      <div class="field">
-        <label for="projectName" class="label"> Nome do Projeto </label>
-        <input
-          type="text"
-          class="input"
-          v-model="projectName"
-          id="projectName"
-        />
-      </div>
-      <div class="field">
-        <button type="submit" class="button">Salvar</button>
-      </div>
-    </form>
-    <table class="table is-fullwidth">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>NOME</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="project in projects" :key="project.id">
-          <td>{{ project.id }}</td>
-          <td>{{ project.name }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
+    <router-view></router-view>
+  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 
-import { useStore } from "@/store";
-
 export default defineComponent({
-  name: "ProjectsComp",
-  data() {
-    return {
-      projectName: "",
-    };
-  },
-  methods: {
-    salve() {
-      this.store.commit("setProjects", this.projectName);
-      this.projectName = "";
-    },
-  },
-  setup() {
-    const store = useStore();
-    return {
-      store,
-      projects: store.state.projects,
-    };
-  },
+  name: "ProjectsView",
 });
 </script>
 
-<style>
+<style scoped>
 .projects {
   padding: 1.25rem;
-}
-form {
-  margin-bottom: 10px;
 }
 </style>

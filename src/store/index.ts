@@ -14,13 +14,17 @@ export const store = createStore<State>({
     projects: [],
   },
   mutations: {
-    setProjects(state, projectName: string) {
+    addProject(state, projectName: string) {
       const project = {
         id: new Date().toISOString(),
         name: projectName,
       } as IProject;
 
       state.projects.push(project);
+    },
+    editProject(state, project: IProject) {
+      const index = state.projects.findIndex((proj) => proj.id === project.id);
+      state.projects[index] = project;
     },
   },
 });
