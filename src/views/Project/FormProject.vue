@@ -24,6 +24,7 @@ import { useStore } from "@/store";
 import { ADD_PROJECT, EDIT_PROJECT } from "@/store/type-mutations";
 import { NotificationType } from "@/interfaces/INotication";
 import { notificationMixin } from "@/mixins/notify";
+import useNotifier from "@/hooks/notifier";
 
 export default defineComponent({
   name: "FormProject",
@@ -46,7 +47,7 @@ export default defineComponent({
       this.projectName = project?.name || "";
     }
   },
-  mixins: [notificationMixin],
+  // mixins: [notificationMixin],
   methods: {
     salve() {
       if (this.id) {
@@ -70,8 +71,10 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
+    const { notify } = useNotifier();
     return {
       store,
+      notify,
     };
   },
 });
