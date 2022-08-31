@@ -24,6 +24,12 @@
                 <i class="fas fa-pencil-alt"></i>
               </span>
             </router-link>
+            <Button
+              :name="'delete'"
+              :class="'ml-2 is-danger'"
+              :icon="{ name: 'fas fa-trash', class: 'is-small' }"
+              @click="removeProject(project.id)"
+            />
           </td>
         </tr>
       </tbody>
@@ -35,15 +41,23 @@
 import { computed, defineComponent } from "vue";
 
 import { useStore } from "@/store";
+import Button from "@/components/ButtonComp.vue";
 
 export default defineComponent({
   name: "ProjectsList",
+  methods: {
+    removeProject(projectId: string) {
+      this.store.commit("deleteProject", projectId);
+    },
+  },
   setup() {
     const store = useStore();
     return {
       projects: computed(() => store.state.projects),
+      store,
     };
   },
+  components: { Button },
 });
 </script>
 

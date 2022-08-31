@@ -1,9 +1,14 @@
 <template>
-  <button :name="name" class="button" @click="callFunc" :disabled="isDisabled">
-    <span v-if="icon" class="icon">
-      <i :class="icon"></i>
+  <button
+    :name="name"
+    :class="`button ${classButton}`"
+    @click="callFunc"
+    :disabled="isDisabled"
+  >
+    <span v-if="icon" :class="`icon ${icon.class}`">
+      <i :class="`${icon.name}`"></i>
     </span>
-    <span v-if="name">{{ name }}</span>
+    <span v-if="value">{{ value }}</span>
   </button>
 </template>
 
@@ -15,9 +20,16 @@ export default defineComponent({
   props: {
     name: {
       type: String,
+      required: true,
+    },
+    value: {
+      type: String,
+    },
+    classButton: {
+      type: String,
     },
     icon: {
-      type: String,
+      type: Object,
     },
     isDisabled: {
       type: Boolean,

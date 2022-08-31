@@ -3,13 +3,15 @@
     <ChronometerComp :time-in-seconds="timeInSeconds" />
     <Button
       name="play"
-      icon="fas fa-play"
+      value="play"
+      :icon="{ name: 'fas fa-play', class: '' }"
       @click="start"
       :is-disabled="chronIsRunnning"
     />
     <Button
       name="stop"
-      icon="fas fa-stop"
+      value="stop"
+      :icon="{ name: 'fas fa-stop', class: '' }"
       @click="finish"
       :is-disabled="!chronIsRunnning"
     />
