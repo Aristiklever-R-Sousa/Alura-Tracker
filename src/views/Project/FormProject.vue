@@ -23,7 +23,6 @@ import { defineComponent } from "vue";
 import { useStore } from "@/store";
 import { ADD_PROJECT, EDIT_PROJECT } from "@/store/type-mutations";
 import { NotificationType } from "@/interfaces/INotication";
-import { notificationMixin } from "@/mixins/notify";
 import useNotifier from "@/hooks/notifier";
 
 export default defineComponent({
@@ -47,7 +46,6 @@ export default defineComponent({
       this.projectName = project?.name || "";
     }
   },
-  // mixins: [notificationMixin],
   methods: {
     salve() {
       if (this.id) {
