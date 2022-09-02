@@ -1,3 +1,4 @@
+export const GET_PROJECT = "getProject";
 export const ADD_PROJECT = "addProject";
 export const EDIT_PROJECT = "editProject";
 export const DELETE_PROJECT = "deleteProject";

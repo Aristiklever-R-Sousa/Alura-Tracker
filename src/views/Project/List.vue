@@ -42,17 +42,19 @@ import { computed, defineComponent } from "vue";
 
 import { useStore } from "@/store";
 import Button from "@/components/ButtonComp.vue";
-import { DELETE_PROJECT } from "../../store/type-mutations";
+import { GET_PROJECTS, DELETE_PROJECT } from "@/store/actions-types";
 
 export default defineComponent({
   name: "ProjectsList",
   methods: {
-    removeProject(projectId: string) {
-      this.store.commit(DELETE_PROJECT, projectId);
+    removeProject(id: string) {
+      this.store.dispatch(DELETE_PROJECT, id);
     },
   },
   setup() {
     const store = useStore();
+    store.dispatch(GET_PROJECTS);
+
     return {
       projects: computed(() => store.state.projects),
       store,

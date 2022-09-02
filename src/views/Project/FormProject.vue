@@ -21,7 +21,7 @@
 import { defineComponent } from "vue";
 
 import { useStore } from "@/store";
-import { ADD_PROJECT, EDIT_PROJECT } from "@/store/type-mutations";
+import { POST_PROJECT, PUT_PROJECT } from "@/store/actions-types";
 import { NotificationType } from "@/interfaces/INotication";
 import useNotifier from "@/hooks/notifier";
 
@@ -40,31 +40,56 @@ export default defineComponent({
   mounted() {
     if (this.id) {
       const project = this.store.state.projects.find(
-        (project) => project.id === this.id
+        (project) => project.id == this.id
       );
 
       this.projectName = project?.name || "";
     }
   },
   methods: {
-    salve() {
+    handleResponse() {
+      return {
+        sucess: () => {
+          this.notify(
+            "Novo projeto salvo!",
+            "Prontinho ;) seu projeto " +
+              this.projectName +
+              " já está disponível.",
+            NotificationType.SUCESS
+          );
+        },
+        fail: () => {
+          this.notify(
+            "Algo bad aconteceu ;(",
+            "Infelizmente algo aconteceu ao tentar salvar o projeto " +
+              this.projectName +
+              " tente novamente mais tarde",
+            NotificationType.FAIL
+          );
+        },
+        default: () => {
+          this.projectName = "";
+          this.$router.push("/projects");
+        },
+      };
+    },
+    async salve() {
       if (this.id) {
-        this.store.commit(EDIT_PROJECT, {
-          id: this.id,
-          name: this.projectName,
-        });
+        this.store
+          .dispatch(PUT_PROJECT, {
+            id: this.id,
+            name: this.projectName,
+          })
+          .then(() => this.handleResponse().sucess())
+          .catch(() => this.handleResponse().fail())
+          .finally(() => this.handleResponse().default());
       } else {
-        this.store.commit(ADD_PROJECT, this.projectName);
+        this.store
+          .dispatch(POST_PROJECT, this.projectName)
+          .then(() => this.handleResponse().sucess())
+          .catch(() => this.handleResponse().fail())
+          .finally(() => this.handleResponse().default());
       }
-
-      this.notify(
-        "Novo projeto salvo!",
-        "Prontinho ;) seu projeto " + this.projectName + " já está disponível.",
-        NotificationType.SUCESS
-      );
-
-      this.projectName = "";
-      this.$router.push("/projects");
     },
   },
   setup() {

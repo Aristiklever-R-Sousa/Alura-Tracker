@@ -4,6 +4,9 @@ import { createStore, Store, useStore as vuexUseStore } from "vuex";
 import IProject from "@/interfaces/IProject";
 import ITask from "@/interfaces/ITask";
 import { INotification } from "@/interfaces/INotication";
+import http from "@/http";
+import { GET_PROJECTS } from "./actions-types";
+import { GET_PROJECT } from "./type-mutations";
 
 interface State {
   projects: IProject[];
@@ -20,20 +23,8 @@ export const store = createStore<State>({
     notifications: [],
   },
   mutations: {
-    addProject(state, projectName: string) {
-      const project = {
-        id: new Date().toISOString(),
-        name: projectName,
-      } as IProject;
-
-      state.projects.push(project);
-    },
-    editProject(state, project: IProject) {
-      const index = state.projects.findIndex((proj) => proj.id === project.id);
-      state.projects[index] = project;
-    },
-    deleteProject(state, projectId: string) {
-      state.projects = state.projects.filter((proj) => proj.id !== projectId);
+    getProjects(state, projects: IProject[]) {
+      state.projects = projects;
     },
 
     addTask(state, task: ITask) {
@@ -56,6 +47,24 @@ export const store = createStore<State>({
       setTimeout(() => {
         state.notifications.shift();
       }, 3000);
+    },
+  },
+  actions: {
+    getProjects({ commit }) {
+      http.get("/projects").then((res) => commit(GET_PROJECT, res.data));
+    },
+    addProject(context, name: string) {
+      return http.post("/projects", {
+        name,
+      });
+    },
+    changeProject({ state }, { id, name }: IProject) {
+      http.put(`/projects/${id}`, {
+        name,
+      });
+    },
+    deleteProject({ dispatch }, id: string) {
+      return http.delete(`/projects/${id}`).then(() => dispatch(GET_PROJECTS));
     },
   },
 });
