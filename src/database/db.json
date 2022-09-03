@@ -8,5 +8,16 @@
       "name": "Vuejs3_Quasar",
       "id": 4
     }
+  ],
+  "tasks": [
+    {
+      "id": 1,
+      "project": {
+        "id": 3,
+        "name": "ReactJS"
+      },
+      "description": "Configuração do Ambiente",
+      "timeInSeconds": 120
+    }
   ]
 }

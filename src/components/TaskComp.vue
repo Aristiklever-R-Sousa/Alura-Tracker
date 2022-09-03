@@ -1,6 +1,6 @@
 <template>
   <Box>
-    <div class="columns">
+    <div class="columns is-flex is-align-items-center">
       <div class="column is-7">
         {{
           task.description ? task.description : "Nenhuma descrição informada."
@@ -17,7 +17,7 @@
           :name="'delete'"
           :class="'ml-2 is-danger'"
           :icon="{ name: 'fas fa-trash', class: 'is-small' }"
-          @click="removeTask(task.id)"
+          @click="removeTask(task.id || '')"
         />
       </div>
     </div>
@@ -33,7 +33,8 @@ import Chronometer from "./ChronometerComp.vue";
 
 import ITask from "@/interfaces/ITask";
 import { useStore } from "@/store";
-import { DELETE_TASK } from "@/store/type-mutations";
+import { DELETE_TASK } from "@/store/actions-types";
+("");
 
 export default defineComponent({
   name: "TaskComp",
@@ -45,7 +46,7 @@ export default defineComponent({
   },
   methods: {
     removeTask(taskId: string) {
-      this.store.commit(DELETE_TASK, taskId);
+      this.store.dispatch(DELETE_TASK, taskId);
     },
   },
   setup() {

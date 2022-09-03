@@ -4,9 +4,9 @@ import { createStore, Store, useStore as vuexUseStore } from "vuex";
 import IProject from "@/interfaces/IProject";
 import ITask from "@/interfaces/ITask";
 import { INotification } from "@/interfaces/INotication";
+
 import http from "@/http";
-import { GET_PROJECTS } from "./actions-types";
-import { GET_PROJECT } from "./type-mutations";
+import { GET_PROJECTS, GET_TASKS } from "./type-mutations";
 
 interface State {
   projects: IProject[];
@@ -27,17 +27,8 @@ export const store = createStore<State>({
       state.projects = projects;
     },
 
-    addTask(state, task: ITask) {
-      task.id = new Date().toISOString();
-
-      state.tasks.push(task);
-    },
-    editTask(state, taskP: ITask) {
-      const index = state.tasks.findIndex((task) => task.id === taskP.id);
-      state.tasks[index] = taskP;
-    },
-    deleteTask(state, taskId: string) {
-      state.tasks = state.tasks.filter((task) => task.id !== taskId);
+    getTasks(state, tasks: ITask[]) {
+      state.tasks = tasks;
     },
 
     notify(state, newNotific: INotification) {
@@ -51,20 +42,42 @@ export const store = createStore<State>({
   },
   actions: {
     getProjects({ commit }) {
-      http.get("/projects").then((res) => commit(GET_PROJECT, res.data));
+      http.get("/projects").then((res) => commit(GET_PROJECTS, res.data));
     },
     addProject(context, name: string) {
       return http.post("/projects", {
         name,
       });
     },
-    changeProject({ state }, { id, name }: IProject) {
-      http.put(`/projects/${id}`, {
+    changeProject(context, { id, name }: IProject) {
+      return http.put(`/projects/${id}`, {
         name,
       });
     },
     deleteProject({ dispatch }, id: string) {
       return http.delete(`/projects/${id}`).then(() => dispatch(GET_PROJECTS));
+    },
+
+    getTasks({ commit }) {
+      http.get("/tasks").then((res) => commit(GET_TASKS, res.data));
+    },
+    addTask(context, task: ITask) {
+      return http.post("/tasks", {
+        id: task.id,
+        description: task.description,
+        project: task.project,
+        timeInSeconds: task.timeInSeconds,
+      });
+    },
+    changeTask(context, task: ITask) {
+      return http.put(`/tasks/${task.id}`, {
+        description: task.description,
+        project: task.project,
+        timeInSeconds: task.timeInSeconds,
+      });
+    },
+    deleteTask({ dispatch }, id: string) {
+      return http.delete(`/tasks/${id}`).then(() => dispatch(GET_TASKS));
     },
   },
 });

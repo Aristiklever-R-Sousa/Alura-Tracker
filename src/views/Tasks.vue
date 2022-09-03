@@ -4,25 +4,44 @@
     <Task v-for="(task, index) in tasks" :key="index" :task="task" />
     <Box v-if="listIsEmpty"> Você não está muito produtivo hoje :( </Box>
   </div>
+  <div class="modal is-active" :class="{ 'is-active': selectedTask }">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Modal title</p>
+        <button class="delete" aria-label="close"></button>
+      </header>
+      <section class="modal-card-body">
+        <!-- Content ... -->
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button is-success">Save changes</button>
+        <button class="button">Cancel</button>
+      </footer>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, computed } from "vue";
 
-import { useStore } from "@/store";
 import Form from "@/components/FormComp.vue";
 import Task from "@/components/TaskComp.vue";
 import Box from "@/components/BoxComp.vue";
 
+import { useStore } from "@/store";
+import useNotify from "@/hooks/notifier";
+
 import ITask from "@/interfaces/ITask";
-import { ADD_TASK, NOTIFY } from "@/store/type-mutations";
 import { NotificationType } from "@/interfaces/INotication";
+import { GET_PROJECTS, GET_TASKS, POST_TASK } from "@/store/actions-types";
 
 export default defineComponent({
   name: "TasksView",
   data() {
     return {
       isDarkTheme: false,
+      selectedTask: null as ITask | null,
     };
   },
   computed: {
@@ -36,14 +55,14 @@ export default defineComponent({
         (p) => p.id == task.project.id
       );
       if (!project) {
-        this.store.commit(NOTIFY, {
-          title: "Ops!",
-          text: "Selecione um projeto antes de finalizar a tarefa!",
-          type: NotificationType.FAIL,
-        });
+        this.notify(
+          "Ops!",
+          "Selecione um projeto antes de finalizar a tarefa!",
+          NotificationType.FAIL
+        );
         return;
       }
-      this.store.commit(ADD_TASK, task);
+      this.store.dispatch(POST_TASK, task);
     },
     toggleTheme(isDarkTheme: boolean) {
       this.isDarkTheme = isDarkTheme;
@@ -51,9 +70,14 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
+    const { notify } = useNotify();
+    store.dispatch(GET_TASKS);
+    store.dispatch(GET_PROJECTS);
+
     return {
       tasks: computed(() => store.state.tasks),
       store,
+      notify,
     };
   },
   components: {

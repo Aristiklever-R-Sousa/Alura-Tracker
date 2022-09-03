@@ -28,7 +28,7 @@
               :name="'delete'"
               :class="'ml-2 is-danger'"
               :icon="{ name: 'fas fa-trash', class: 'is-small' }"
-              @click="removeProject(project.id)"
+              @click="removeProject(project.id || '')"
             />
           </td>
         </tr>
