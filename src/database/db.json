@@ -7,6 +7,10 @@
     {
       "name": "Vuejs3_Quasar",
       "id": 4
+    },
+    {
+      "name": "Vuejs3_Quasar",
+      "id": 5
     }
   ],
   "tasks": [
@@ -18,6 +22,15 @@
       },
       "description": "Configuração do Ambiente",
       "timeInSeconds": 120
+    },
+    {
+      "description": "Estudando o bulma",
+      "project": {
+        "name": "Vuejs3_Quasar",
+        "id": 4
+      },
+      "timeInSeconds": 4,
+      "id": 2
     }
   ]
 }

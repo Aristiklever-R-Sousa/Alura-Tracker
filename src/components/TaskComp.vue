@@ -1,6 +1,9 @@
 <template>
   <Box>
-    <div class="columns is-flex is-align-items-center">
+    <div
+      class="columns is-flex is-align-items-center clicable"
+      @click="triggeredTask"
+    >
       <div class="column is-7">
         {{
           task.description ? task.description : "Nenhuma descrição informada."
@@ -38,6 +41,7 @@ import { DELETE_TASK } from "@/store/actions-types";
 
 export default defineComponent({
   name: "TaskComp",
+  emits: ["onTriggeredTask"],
   props: {
     task: {
       type: Object as PropType<ITask>,
@@ -45,6 +49,9 @@ export default defineComponent({
     },
   },
   methods: {
+    triggeredTask(): void {
+      this.$emit("onTriggeredTask");
+    },
     removeTask(taskId: string) {
       this.store.dispatch(DELETE_TASK, taskId);
     },
@@ -62,3 +69,9 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+.clicable {
+  cursor: pointer;
+}
+</style>

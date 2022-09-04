@@ -1,22 +1,35 @@
 <template>
   <Form @on-save-task="addTask" />
   <div class="list">
-    <Task v-for="(task, index) in tasks" :key="index" :task="task" />
+    <Task
+      v-for="(task, index) in tasks"
+      :key="index"
+      :task="task"
+      @on-triggered-task="taskSelect(task)"
+    />
     <Box v-if="listIsEmpty"> Você não está muito produtivo hoje :( </Box>
   </div>
-  <div class="modal is-active" :class="{ 'is-active': selectedTask }">
+  <div class="modal" :class="{ 'is-active': selectedTask }" v-if="selectedTask">
     <div class="modal-background"></div>
     <div class="modal-card">
       <header class="modal-card-head">
-        <p class="modal-card-title">Modal title</p>
-        <button class="delete" aria-label="close"></button>
+        <p class="modal-card-title">Editando uma tarefa!</p>
+        <button @click="modalClose" class="delete" aria-label="close"></button>
       </header>
       <section class="modal-card-body">
-        <!-- Content ... -->
+        <div class="field">
+          <label for="description" class="label"> Descrição </label>
+          <input
+            type="text"
+            class="input"
+            v-model="selectedTask.description"
+            id="description"
+          />
+        </div>
       </section>
       <footer class="modal-card-foot">
-        <button class="button is-success">Save changes</button>
-        <button class="button">Cancel</button>
+        <button @click="editTask" class="button is-success">Salvar</button>
+        <button @click="modalClose" class="button">Cancelar</button>
       </footer>
     </div>
   </div>
@@ -34,7 +47,12 @@ import useNotify from "@/hooks/notifier";
 
 import ITask from "@/interfaces/ITask";
 import { NotificationType } from "@/interfaces/INotication";
-import { GET_PROJECTS, GET_TASKS, POST_TASK } from "@/store/actions-types";
+import {
+  GET_PROJECTS,
+  GET_TASKS,
+  POST_TASK,
+  PUT_TASK,
+} from "@/store/actions-types";
 
 export default defineComponent({
   name: "TasksView",
@@ -50,8 +68,14 @@ export default defineComponent({
     },
   },
   methods: {
+    taskSelect(task: ITask) {
+      this.selectedTask = task;
+    },
+    modalClose() {
+      this.selectedTask = null;
+    },
     addTask(task: ITask) {
-      const project = this.store.state.projects.find(
+      const project = this.store.state.project.projects.find(
         (p) => p.id == task.project.id
       );
       if (!project) {
@@ -64,6 +88,11 @@ export default defineComponent({
       }
       this.store.dispatch(POST_TASK, task);
     },
+    editTask() {
+      this.store
+        .dispatch(PUT_TASK, this.selectedTask)
+        .then(() => this.modalClose());
+    },
     toggleTheme(isDarkTheme: boolean) {
       this.isDarkTheme = isDarkTheme;
     },
@@ -75,7 +104,7 @@ export default defineComponent({
     store.dispatch(GET_PROJECTS);
 
     return {
-      tasks: computed(() => store.state.tasks),
+      tasks: computed(() => store.state.task.tasks),
       store,
       notify,
     };
