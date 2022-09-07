@@ -39,6 +39,11 @@ export default defineComponent({
 </script>
 
 <style>
+html,
+body {
+  overflow-y: hidden;
+}
+
 main {
   --primary-bg: rgb(243, 237, 237);
   --primary-text: rgb(7, 6, 6);

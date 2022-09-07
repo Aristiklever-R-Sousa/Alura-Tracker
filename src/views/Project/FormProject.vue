@@ -18,12 +18,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 
 import { useStore } from "@/store";
 import { POST_PROJECT, PUT_PROJECT } from "@/store/actions-types";
 import { NotificationType } from "@/interfaces/INotication";
 import useNotifier from "@/hooks/notifier";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "FormProject",
@@ -32,72 +33,69 @@ export default defineComponent({
       type: String,
     },
   },
-  data() {
-    return {
-      projectName: "",
-    };
-  },
-  mounted() {
-    if (this.id) {
-      const project = this.store.state.project.projects.find(
-        (project) => project.id == this.id
+  setup(props) {
+    const store = useStore();
+    const router = useRouter();
+    const { notify } = useNotifier();
+
+    const projectName = ref("");
+
+    if (props.id) {
+      const project = store.state.project.projects.find(
+        (project) => project.id == props.id
       );
 
-      this.projectName = project?.name || "";
+      projectName.value = project?.name || "";
     }
-  },
-  methods: {
-    handleResponse() {
+
+    const handleResponse = () => {
       return {
         sucess: () => {
-          this.notify(
+          notify(
             "Novo projeto salvo!",
             "Prontinho ;) seu projeto " +
-              this.projectName +
+              projectName.value +
               " já está disponível.",
             NotificationType.SUCESS
           );
         },
         fail: () => {
-          this.notify(
+          notify(
             "Algo bad aconteceu ;(",
-            "Infelizmente algo aconteceu ao tentar salvar o projeto " +
-              this.projectName +
-              " tente novamente mais tarde",
+            `Infelizmente algo aconteceu ao tentar salvar o projeto ${projectName.value} tente novamente mais tarde`,
             NotificationType.FAIL
           );
         },
         default: () => {
-          this.projectName = "";
-          this.$router.push("/projects");
+          projectName.value = "";
+          router.push("/projects");
         },
       };
-    },
-    async salve() {
-      if (this.id) {
-        this.store
+    };
+
+    const salve = async () => {
+      if (props.id) {
+        store
           .dispatch(PUT_PROJECT, {
-            id: this.id,
-            name: this.projectName,
+            id: props.id,
+            name: projectName.value,
           })
-          .then(() => this.handleResponse().sucess())
-          .catch(() => this.handleResponse().fail())
-          .finally(() => this.handleResponse().default());
+          .then(() => handleResponse().sucess())
+          .catch(() => handleResponse().fail())
+          .finally(() => handleResponse().default());
       } else {
-        this.store
-          .dispatch(POST_PROJECT, this.projectName)
-          .then(() => this.handleResponse().sucess())
-          .catch(() => this.handleResponse().fail())
-          .finally(() => this.handleResponse().default());
+        store
+          .dispatch(POST_PROJECT, projectName)
+          .then(() => handleResponse().sucess())
+          .catch(() => handleResponse().fail())
+          .finally(() => handleResponse().default());
       }
-    },
-  },
-  setup() {
-    const store = useStore();
-    const { notify } = useNotifier();
+    };
+
     return {
-      store,
-      notify,
+      projectName,
+      handleResponse,
+      salve,
     };
   },
 });

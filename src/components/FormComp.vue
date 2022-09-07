@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from "vue";
+import { computed, defineComponent, ref } from "vue";
 
 import TimerComp from "./TimerComp.vue";
 import ITask from "@/interfaces/ITask";
@@ -44,35 +44,36 @@ import { useStore } from "@/store";
 
 export default defineComponent({
   name: "FormComp",
-  data() {
-    return {
-      description: "",
-      projectId: "",
-    };
-  },
   emits: ["onSaveTask"],
-  methods: {
-    taskFinish(timeInSeconds: number) {
-      const project = this.projects.find(
-        (project) => project.id === this.projectId
+  methods: {},
+  setup(props, context) {
+    const store = useStore();
+
+    const projects = computed(() => store.state.project.projects);
+    const description = ref("");
+    const projectId = ref("");
+
+    const taskFinish = (timeInSeconds: number): void => {
+      const project = projects.value.find(
+        (project) => project.id === projectId.value
       ) || { id: "", name: "" };
 
       const payload: ITask = {
         id: new Date().toISOString(),
-        description: this.description,
+        description: description.value,
         timeInSeconds,
         project,
       };
 
-      this.$emit("onSaveTask", payload);
-      this.description = "";
-    },
-  },
-  setup() {
-    const store = useStore();
+      context.emit("onSaveTask", payload);
+      description.value = "";
+    };
 
     return {
-      projects: computed(() => store.state.project.projects),
+      projects,
+      description,
+      projectId,
+      taskFinish,
     };
   },
   components: {

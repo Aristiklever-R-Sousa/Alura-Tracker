@@ -37,7 +37,6 @@ import Chronometer from "./ChronometerComp.vue";
 import ITask from "@/interfaces/ITask";
 import { useStore } from "@/store";
 import { DELETE_TASK } from "@/store/actions-types";
-("");
 
 export default defineComponent({
   name: "TaskComp",
@@ -48,18 +47,19 @@ export default defineComponent({
       required: true,
     },
   },
-  methods: {
-    triggeredTask(): void {
-      this.$emit("onTriggeredTask");
-    },
-    removeTask(taskId: string) {
-      this.store.dispatch(DELETE_TASK, taskId);
-    },
-  },
-  setup() {
+  setup(props, context) {
     const store = useStore();
+
+    const triggeredTask = (): void => {
+      context.emit("onTriggeredTask");
+    };
+    const removeTask = (taskId: string) => {
+      store.dispatch(DELETE_TASK, taskId);
+    };
+
     return {
-      store,
+      triggeredTask,
+      removeTask,
     };
   },
   components: {

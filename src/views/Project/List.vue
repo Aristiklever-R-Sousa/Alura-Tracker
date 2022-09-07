@@ -46,18 +46,17 @@ import { GET_PROJECTS, DELETE_PROJECT } from "@/store/actions-types";
 
 export default defineComponent({
   name: "ProjectsList",
-  methods: {
-    removeProject(id: string) {
-      this.store.dispatch(DELETE_PROJECT, id);
-    },
-  },
   setup() {
     const store = useStore();
     store.dispatch(GET_PROJECTS);
 
+    const removeProject = (id: string) => {
+      store.dispatch(DELETE_PROJECT, id);
+    };
+
     return {
       projects: computed(() => store.state.project.projects),
-      store,
+      removeProject,
     };
   },
   components: { Button },
